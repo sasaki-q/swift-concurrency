@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 class Counter1 {
     var val: Int = 0
     
@@ -27,8 +28,19 @@ actor Counter3 {
     }
 }
 
+@MainActor
+class Conuter4: ObservableObject {
+    @Published var val: Int = 0
+    
+    func increment() {
+        val = val + 1
+        print(val)
+    }
+}
+
 struct Actor: View {
-    let counter1 = Counter1()
+    // class
+    private var counter1: Counter1 = Counter1()
     
     private func func1() {
         DispatchQueue.concurrentPerform(iterations: 100) { _ in
@@ -38,6 +50,7 @@ struct Actor: View {
     
     // struct
     @State private var counter2: Counter2 = Counter2()
+    
     private func func2() {
         DispatchQueue.concurrentPerform(iterations: 100) { _ in
             counter2.increment()
@@ -46,6 +59,7 @@ struct Actor: View {
     
     // actor
     private let counter3: Counter3 = Counter3()
+    
     private func func3() {
         DispatchQueue.concurrentPerform(iterations: 100) { _ in
             // suspension
@@ -53,11 +67,21 @@ struct Actor: View {
         }
     }
     
+    // @MainActor mutable
+    @StateObject private var counter4: Conuter4
+    
+    init() {
+        _counter4 = StateObject(wrappedValue: Conuter4())
+    }
+    
+    private func func4() { counter4.increment() }
+    
     var body: some View {
         VStack {
             Button { func1() }label: { Text("class") }
             Button { func2() }label: { Text("struct") }
             Button { func3() }label: { Text("actor") }
+            Button { func4() }label: { Text("@MainActor value:\(counter4.val)") }
         }
     }
 }

@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var vm = ViewModel()
+    @StateObject private var vm: ViewModel
     
+    init() {
+        _vm = StateObject(wrappedValue: ViewModel())
+    }
     
     var body: some View {
         NavigationView{
