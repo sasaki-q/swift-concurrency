@@ -4,7 +4,8 @@ import SwiftUI
 struct ImageApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Actor()
+            //ContentView()
         }
     }
 }
